@@ -1,0 +1,40 @@
+openapi: '3.0.2'
+info:
+  title: campusapi
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+
+components:
+  schemas:
+    devices:
+      type: array
+      items:
+        $ref: '#/components/schemas/devices'
+    device:
+      type: object
+      required:
+        - "deviceName"
+        - "deviceType"
+      properties:
+        deviceId:
+          type: "string"
+          description: "Unique id of the device"
+        deviceName:
+          type: "string"
+          description: "Name of the device"
+        deviceType:
+          type: "string"
+          description: "Type of the device"
+          enum: ["co2", "pir"]
+paths:
+  /devices:
+    get:
+      description: get the list of all devices
+      responses:
+        '200':
+          description: List of devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/device'
