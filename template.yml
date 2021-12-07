@@ -13,7 +13,7 @@ Resources:
     Type: AWS::Serverless::Api 
     Properties: 
       Cors: 
-        AllowMethods: "'POST, GET, OPTIONS, PUT'" 
+        AllowMethods: "'POST, GET, OPTIONS, PUT'"
         AllowHeaders: "'Accept, Content-Type, Content-Length, Authorization, X-Api-Key'" 
         AllowOrigin: "'*'" 
         MaxAge: "'600'" 
@@ -64,3 +64,33 @@ Resources:
                   - lambda:InvokeFunction
                 Resource:
                   Fn::Sub: ${GetDevices.Arn}
+
+  DevicesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "campus-l3-dev-app-tom-table-device-dev"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "deviceType"
+          AttributeType: "S"
+        - AttributeName: "deviceName"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - IndexName: deviceTypeAndName
+          KeySchema:
+            - AttributeName: "deviceType"
+              KeyType: "HASH"
+            - AttributeName: "deviceName"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"

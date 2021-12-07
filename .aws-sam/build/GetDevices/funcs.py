@@ -1,17 +1,4 @@
 import json
-import boto3
-from botocore.config import Config
-
-dynamo_config = Config(
-    region_name='eu-west-2',
-    signature_version='v4',
-    retries = {
-        'max_attemps': 10,
-        'mode': 'standard'
-    }
-)
-
-client = boto3.client('kinesis', config=dynamo_config)
 
 
 def get_devices(context, event):
