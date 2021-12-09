@@ -36,6 +36,31 @@ Resources:
       Description: Get the list of devices
       CodeUri: GetDevices
       Handler: funcs.get_devices
+      Environment:
+        Variables:
+          devicesTable: campus-l3-dev-app-tom-table-device-dev
+  PutDevice:
+    Type: AWS::Serverless::Function
+    Properties:
+      Tracing: Active
+      Runtime: python3.8
+      PackageType: Zip
+      FunctionName:
+        Fn::Sub: ${AppName}-put-device-${Stage}
+      Description: Create a device
+      CodeUri: PutDevice
+      Handler: funcs.put_device
+      Environment:
+        Variables:
+          devicesTable: campus-l3-dev-app-tom-table-device-dev
+      Events:
+        DeviceId:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /device/{id}
+            RestApiId:
+              Ref: Api
   ApiRole:
     Type: AWS::IAM::Role
     Properties:
@@ -60,6 +85,13 @@ Resources:
           - Effect: Allow
             Action:
             - lambda:InvokeFunction
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
             Resource:
               Fn::Sub: ${GetDevices.Arn}
   DevicesTable:

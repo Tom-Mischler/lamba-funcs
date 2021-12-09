@@ -28,6 +28,43 @@ components:
           description: "Type of the device" 
           enum: ["co2", "pir"]   
 paths:
+  /device/{id}:
+    get:
+      description: "Get a device by its id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/device'
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::Sub: ${ApiRole.Arn}
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetDevices.Arn}/invocations
+        httpMethod: POST
+        timeoutInMillis: 3000
+        type: "aws_proxy"
+
+  # /device/delete/{id}:
+  #   get:
+  #   description: "Delete a device by id"
+  #   responses:
+  #     description: OK
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/device'
+  #   x-amazon-apigateway-integration:
+  #       credentials:
+  #         Fn::Sub: ${ApiRole.Arn}
+  #       uri:
+  #         Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetDevices.Arn}/invocations
+  #       httpMethod: POST
+  #       timeoutInMillis: 3000
+  #       type: "aws_proxy"
+
   /devices:
     get:
       description: "Get the list of devices"

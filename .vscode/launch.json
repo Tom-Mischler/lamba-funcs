@@ -13,6 +13,20 @@
                 "payload": {},
                 "environmentVariables": {}
             }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "lamba-funcs:GetDevices",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yml",
+                "logicalId": "GetDevices"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {}
+            }
         }
     ]
 }
